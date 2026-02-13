@@ -1,0 +1,105 @@
+#authContainer {
+  background-color: rgb(251, 249, 239);
+  border: 2px #b0b0b0 solid;
+  border-radius: 6px;
+  color: #373737;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+
+  width: min(90vw, 700px);
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+  position: relative;
+}
+
+#authContainer h1 {
+  margin: 1em auto;
+  font-size: 3em;
+  font-weight: 400;
+}
+
+#authContainer .inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+
+  margin: auto;
+  margin-top: 1em;
+
+  width: min(100%, 480px);
+  text-align: right;
+}
+
+#authContainer input {
+  border: none;
+  outline: none;
+  background-color: #eaeaea;
+  color: #797979;
+  border-radius: 6px;
+
+  padding-left: 20px;
+
+  height: 60px;
+  width: 100%;
+  font-size: 1em;
+}
+
+#authContainer a.forgot-pass {
+  display: inline-block;
+}
+
+#authContainer h3 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+#authContainer button.submitButton {
+  margin: 1.5em auto;
+  /* margin-top: 1.5em; */
+
+  background-color: #373737;
+  color: white;
+  border: none;
+  border-radius: 6px;
+
+  height: 50px;
+  width: min(100%, 200px);
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+#authContainer a.signup-link,
+#authContainer a.login-link {
+  text-decoration: none;
+  padding-left: 0.5em;
+}
+
+#authContainer div.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  background-color: transparent;
+  border: none;
+  color: #373737;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#authContainer div.navigation {
+  display: flex;
+}
+
+#authContainer p.email-sent-notice {
+    text-align: center;
+    margin: 1em auto;
+    font-size: 1em;
+    display: block;
+}
+
+.dev {
+  background-color: rgba(200, 0, 200, 0.2);
+}
