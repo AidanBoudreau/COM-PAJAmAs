@@ -1,0 +1,215 @@
+.text-logo{
+    height: 60px;
+    width: auto;
+}
+.cart-icon{
+    width: 40px;
+    height: auto;
+}
+.bottom-nav{
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-around;
+    padding: 16px;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+
+    justify-content: center;
+    z-index: 1000;
+}
+body {
+  padding-bottom: 70px;
+}
+.nav-menu{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    list-style: none;
+    font-size: 20px;
+    font-weight: 500;
+    justify-content: center;
+    
+}
+.nav-menu li{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    cursor: pointer;
+}
+.nav-menu hr{
+    border:none;
+    width:80%;
+    height: 3px;
+    border-radius: 10px;
+    background-color: black;
+}
+.nav-login-cart{
+    color:black;
+    display: flex;
+    align-items: center;
+    gap: 45px;
+}
+.login-button_nav-link{
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.login-button_nav-link:hover{
+    transform: scale(1.1);
+}
+.cart-container{
+    position: relative;
+    padding-right: 5px;
+}
+.nav-cart-count{
+    position: absolute;
+    top: 0;
+    right:0;
+    transition: transform 0.2s ease;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    font-size: 14px;
+    background: red;
+    color: white;
+}
+.nav-login-cart button{
+    padding: 5px;
+    background-color: blanchedalmond;
+}
+.cart-container:hover .nav-cart-count{
+    transform: scale(1.1);
+}
+.nav-link{
+    color: inherit;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.nav-link:hover{
+    color: black;
+}
+.nav-login-cart .cart-icon{
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    color: black;
+}
+.nav-login-cart .cart-icon:hover{
+    transform: scale(1.08);
+}
+/* ---------- Mobile Navbar Fix ---------- */
+.navbar {
+  width: 100%;
+  justify-content: space-between; /* instead of space-around */
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-logo {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.text-logo {
+  height: 52px; /* slightly smaller by default */
+  width: auto;
+}
+
+.nav-menu {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* phones */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .text-logo {
+    height: 44px;
+  }
+
+  .nav-login-cart {
+    gap: 14px; /* smaller */
+    flex: 0 0 auto;
+  }
+
+  .cart-icon {
+    width: 32px;
+  }
+
+  /* Make the middle menu not break the layout */
+  .nav-menu {
+    gap: 16px;
+    font-size: 16px;
+    overflow-x: auto;       /* prevents squish/crop */
+    white-space: nowrap;    /* keep items on one line */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;  /* hide scrollbar firefox */
+  }
+  .nav-menu::-webkit-scrollbar {
+    display: none;          /* hide scrollbar chrome */
+  }
+
+  .nav-menu li {
+    flex: 0 0 auto;
+  }
+
+  /* underline (hr) is awkward on mobile - hide it */
+  .nav-menu hr {
+    display: none;
+  }
+
+  .nav-link {
+    flex-direction: row; /* less vertical stacking */
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 999px;
+  }
+
+  .nav-link:active {
+    transform: scale(0.98);
+  }
+
+  .cart-container {
+    padding-right: 0;
+  }
+
+  .nav-cart-count {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    top: -6px;
+    right: -6px; /* keeps badge visible */
+  }
+}
+
+/* very small phones */
+@media (max-width: 420px) {
+  .text-logo {
+    height: 40px;
+  }
+
+  .nav-menu {
+    gap: 12px;
+    font-size: 15px;
+  }
+
+  .nav-login-cart {
+    gap: 10px;
+  }
+
+  .cart-icon {
+    width: 30px;
+  }
+}

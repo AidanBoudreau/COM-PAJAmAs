@@ -1,31 +1,22 @@
 "use client";
-import "./dashboard.css";
+import "./clients.css";
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { clients } from "@/components/data/clients";
 import { UserRoundPlus , User, UsersRound, ChevronRight } from "lucide-react";
 
 export default function Dashboard() {
-    const top5 = clients.slice(0, 5);
+    const top5 = clients.slice(0, 10);
 
     return (
         <div className = "dashboardContainer">
-            <div className = "buttonContainer">
-                <button className = "dashboardButton">
-                    <UserRoundPlus size={30} />
-                    Add Clients
-                </button>
-                <button className = "dashboardButton">
-                    <UsersRound size={30} />
-                    Invite Collaborators
-                </button>
-            </div>
 
             <div className="clientsContainer">
                 <section className="clientsSection">
                     <div className="clientsHeaderRow">
-                        <h2 className="clientsTitle">Clients</h2>
+                        <h2 className="clientsTitle">All Clients</h2>
                     </div>
 
                     <div className="clientsList">
