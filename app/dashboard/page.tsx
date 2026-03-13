@@ -11,15 +11,17 @@ export default function Dashboard() {
 
     return (
         <div className = "dashboardContainer">
-            <div className = "buttonContainer">
-                <button className = "dashboardButton">
-                    <UserRoundPlus size={30} />
-                    Add Clients
-                </button>
-                <button className = "dashboardButton">
-                    <UsersRound size={30} />
-                    Invite Collaborators
-                </button>
+            <div className="buttonContainer">
+
+            <Link href="/clients/new" className="dashboardButton">
+                <UserRoundPlus size={30} />
+                Add Clients
+            </Link>
+            <Link href="/invite" className="dashboardButton">
+                <UsersRound size={30} />
+                Invite Collaborators
+            </Link>
+
             </div>
 
             <div className="clientsContainer">
