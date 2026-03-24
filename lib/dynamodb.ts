@@ -324,4 +324,34 @@ export async function deleteUserById(userId: string) {
   }
 }
 
+export async function scanClientsByDateRange(
+  startDate: string,
+  endDate: string,
+): Promise<ClientRecord[]> {
+  const clients: ClientRecord[] = [];
+  let exclusiveStartKey: Record<string, unknown> | undefined;
+
+  do {
+    const response = await getDocumentClient().send(
+      new ScanCommand({
+        TableName: getClientsTableName(),
+        FilterExpression: "#lhd BETWEEN :start AND :endDate",
+        ExpressionAttributeNames: {
+          "#lhd": "lastHelpedDate",
+        },
+        ExpressionAttributeValues: {
+          ":start": startDate,
+          ":endDate": endDate,
+        },
+        ExclusiveStartKey: exclusiveStartKey,
+      }),
+    );
+
+    clients.push(...((response.Items as ClientRecord[] | undefined) ?? []));
+    exclusiveStartKey = response.LastEvaluatedKey as Record<string, unknown> | undefined;
+  } while (exclusiveStartKey);
+
+  return clients;
+}
+
 export { isConditionalCheckFailed };

@@ -1,54 +1,80 @@
 "use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { UserRoundPlus } from "lucide-react";
+import ClientSearchForm from "@/components/ClientSearchForm";
+import ClientList from "@/components/ClientList";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { searchClients, getEligibility } from "@/lib/apiClient";
+import type { ClientRecord } from "@/lib/dynamodb";
+import type { EligibilityResult } from "@/lib/apiClient";
 import "./clients.css";
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { clients } from "@/components/data/clients";
-import { UserRoundPlus , User, UsersRound, ChevronRight } from "lucide-react";
+export default function ClientsPage() {
+  const [clients, setClients] = useState<ClientRecord[]>([]);
+  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
 
-export default function Dashboard() {
-    const top5 = clients.slice(0, 10);
+  async function handleSearch(lastName: string, DOB: string, firstName?: string) {
+    setIsLoading(true);
+    setError("");
+    setHasSearched(true);
 
-    return (
-        <div className = "dashboardContainer">
+    try {
+      let results = await searchClients(lastName, DOB);
 
-            <div className="clientsContainer">
-                <section className="clientsSection">
-                    <div className="clientsHeaderRow">
-                        <h2 className="clientsTitle">All Clients</h2>
-                    </div>
+      if (firstName) {
+        results = results.filter((c) =>
+          c.firstName.toLowerCase().includes(firstName.toLowerCase())
+        );
+      }
 
-                    <div className="clientsList">
-                    {top5.map((client, idx) => (
-                        <Link
-                        key={client.id}
-                        href={`/clients/${client.slug}`}
-                        className="clientRow"
-                        >
-                        <div className="clientLeft">
-                            <div className="clientNumber">{idx + 1}.</div>
+      setClients(results);
 
-                            <div className="clientAvatarWrap">
-                            <Image
-                                src={client.photo || "/default-client.png"}
-                                alt={client.name}
-                                fill
-                                className="clientAvatar"
-                                sizes="44px"
-                            />
-                            </div>
+      const eligMap: Record<string, EligibilityResult | null> = {};
+      const eligPromises = results.map(async (client) => {
+        try {
+          eligMap[client.clientId] = await getEligibility(client.clientId);
+        } catch {
+          eligMap[client.clientId] = null;
+        }
+      });
+      await Promise.all(eligPromises);
+      setEligibilityMap(eligMap);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Search failed.");
+      setClients([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-                            <div className="clientName">{client.name}</div>
-                        </div>
+  return (
+    <div className="clients-page">
+      <div className="clients-header">
+        <h1>Clients</h1>
+        <Link href="/clients/new" className="add-client-button">
+          <UserRoundPlus size={18} />
+          Add Client
+        </Link>
+      </div>
 
-                        <ChevronRight className="clientChevron" size={22} />
-                        </Link>
-                    ))}
-                    </div>
-                </section>
-            </div>
+      <ClientSearchForm onSearch={handleSearch} isLoading={isLoading} />
 
-        </div>
-    );
+      {error && <p className="clients-error">{error}</p>}
+
+      {isLoading && <LoadingSpinner />}
+
+      {!isLoading && hasSearched && (
+        <ClientList clients={clients} eligibilityMap={eligibilityMap} />
+      )}
+
+      {!hasSearched && (
+        <p className="clients-hint">Search for clients by last name and date of birth.</p>
+      )}
+    </div>
+  );
 }

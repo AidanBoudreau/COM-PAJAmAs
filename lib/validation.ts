@@ -57,6 +57,10 @@ export function isValidDateString(value: string) {
     return false;
   }
 
+  if (value === "0000-00-00") {
+    return true;
+  }
+
   const parsed = new Date(`${value}T00:00:00.000Z`);
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
@@ -247,4 +251,36 @@ export function validateSearchInput(searchParams: URLSearchParams): SearchInput 
     lastName: lastName.trim(),
     DOB: DOB.trim(),
   };
+}
+
+export interface DateRangeInput {
+  start: string;
+  end: string;
+}
+
+export function validateDateRangeInput(searchParams: URLSearchParams): DateRangeInput {
+  const start = searchParams.get("start");
+  const end = searchParams.get("end");
+
+  if (!start || !start.trim()) {
+    throw new ValidationError("start is required in YYYY-MM-DD format.");
+  }
+
+  if (!end || !end.trim()) {
+    throw new ValidationError("end is required in YYYY-MM-DD format.");
+  }
+
+  if (!isValidDateString(start.trim())) {
+    throw new ValidationError("start must be a valid date in YYYY-MM-DD format.");
+  }
+
+  if (!isValidDateString(end.trim())) {
+    throw new ValidationError("end must be a valid date in YYYY-MM-DD format.");
+  }
+
+  if (start.trim() > end.trim()) {
+    throw new ValidationError("start must not be after end.");
+  }
+
+  return { start: start.trim(), end: end.trim() };
 }

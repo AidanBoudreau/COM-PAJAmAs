@@ -1,0 +1,108 @@
+.new-client-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 100px;
+}
+
+.new-client-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #0084ff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.new-client-back:hover {
+  color: #006acc;
+}
+
+.new-client-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+}
+
+.new-client-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #373737;
+  margin: 0 0 20px;
+}
+
+.new-client-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.new-client-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.new-client-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.new-client-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #373737;
+  box-sizing: border-box;
+}
+
+.new-client-field input:focus {
+  outline: none;
+  border-color: #0084ff;
+  box-shadow: 0 0 0 2px rgba(0, 132, 255, 0.15);
+}
+
+.new-client-error {
+  color: #c0392b;
+  background: #fdeaea;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.new-client-submit {
+  background: #0084ff;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.new-client-submit:hover {
+  background: #006acc;
+}
+
+.new-client-submit:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+@media (max-width: 420px) {
+  .new-client-grid {
+    grid-template-columns: 1fr;
+  }
+}

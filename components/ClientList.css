@@ -1,0 +1,12 @@
+.client-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.client-list-empty {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+  font-size: 14px;
+}

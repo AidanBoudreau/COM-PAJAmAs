@@ -1,0 +1,56 @@
+.report-table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-year-header {
+  background: #0084ff;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 14px 20px;
+  text-align: left;
+}
+
+.report-table thead tr:last-child th {
+  background: #f5f7fa;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.report-table tbody td {
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #373737;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.report-number {
+  text-align: right;
+}
+
+.report-total-row {
+  background: #f9fafb;
+}
+
+.report-total-row td {
+  border-bottom: none;
+}
+
+.report-empty {
+  text-align: center;
+  color: #999;
+  padding: 24px 20px;
+}

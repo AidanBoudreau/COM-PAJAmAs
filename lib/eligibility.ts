@@ -31,6 +31,15 @@ export function calculateEligibility(
     throw new ValidationError("eligibilityWindowDays must be a positive integer.");
   }
 
+  if (lastHelpedDate === "0000-00-00") {
+    return {
+      eligible: true,
+      daysSinceLastHelp: Infinity,
+      daysRemaining: 0,
+      nextEligibleDate: "0000-00-00",
+    };
+  }
+
   const lastHelpedUtc = parseDateAtUtcMidnight(lastHelpedDate);
   const todayUtc = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate());
   const daysSinceLastHelp = Math.floor((todayUtc - lastHelpedUtc) / MS_PER_DAY);

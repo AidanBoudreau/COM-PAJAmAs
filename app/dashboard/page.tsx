@@ -1,63 +1,83 @@
 "use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { UserRoundPlus, CalendarRange, Search } from "lucide-react";
+import ClientSearchForm from "@/components/ClientSearchForm";
+import ClientList from "@/components/ClientList";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { searchClients, getEligibility } from "@/lib/apiClient";
+import type { ClientRecord } from "@/lib/dynamodb";
+import type { EligibilityResult } from "@/lib/apiClient";
 import "./dashboard.css";
 
-import Link from "next/link";
-import Image from "next/image";
-import { clients } from "@/components/data/clients";
-import { UserRoundPlus , User, UsersRound, ChevronRight } from "lucide-react";
-
 export default function Dashboard() {
-    const top5 = clients.slice(0, 5);
+  const [clients, setClients] = useState<ClientRecord[]>([]);
+  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
 
-    return (
-        <div className = "dashboardContainer">
-            <div className = "buttonContainer">
-                <button className = "dashboardButton">
-                    <UserRoundPlus size={30} />
-                    Add Clients
-                </button>
-                <button className = "dashboardButton">
-                    <UsersRound size={30} />
-                    Invite Collaborators
-                </button>
-            </div>
+  async function handleSearch(lastName: string, DOB: string, firstName?: string) {
+    setIsLoading(true);
+    setError("");
+    setHasSearched(true);
 
-            <div className="clientsContainer">
-                <section className="clientsSection">
-                    <div className="clientsHeaderRow">
-                        <h2 className="clientsTitle">Clients</h2>
-                    </div>
+    try {
+      let results = await searchClients(lastName, DOB);
+      if (firstName) {
+        results = results.filter((c) =>
+          c.firstName.toLowerCase().includes(firstName.toLowerCase())
+        );
+      }
+      setClients(results);
 
-                    <div className="clientsList">
-                    {top5.map((client, idx) => (
-                        <Link
-                        key={client.id}
-                        href={`/clients/${client.slug}`}
-                        className="clientRow"
-                        >
-                        <div className="clientLeft">
-                            <div className="clientNumber">{idx + 1}.</div>
+      const eligMap: Record<string, EligibilityResult | null> = {};
+      await Promise.all(
+        results.map(async (client) => {
+          try {
+            eligMap[client.clientId] = await getEligibility(client.clientId);
+          } catch {
+            eligMap[client.clientId] = null;
+          }
+        })
+      );
+      setEligibilityMap(eligMap);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Search failed.");
+      setClients([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
-                            <div className="clientAvatarWrap">
-                            <Image
-                                src={client.photo || "/default-client.png"}
-                                alt={client.name}
-                                fill
-                                className="clientAvatar"
-                                sizes="44px"
-                            />
-                            </div>
+  return (
+    <div className="dashboard-page">
+      <h1 className="dashboard-title">Dashboard</h1>
 
-                            <div className="clientName">{client.name}</div>
-                        </div>
+      <div className="dashboard-actions">
+        <Link href="/clients/new" className="dashboard-action-card">
+          <UserRoundPlus size={28} />
+          <span>Add Client</span>
+        </Link>
+        <Link href="/calendar" className="dashboard-action-card">
+          <CalendarRange size={28} />
+          <span>Calendar</span>
+        </Link>
+        <Link href="/clients" className="dashboard-action-card">
+          <Search size={28} />
+          <span>Search Clients</span>
+        </Link>
+      </div>
 
-                        <ChevronRight className="clientChevron" size={22} />
-                        </Link>
-                    ))}
-                    </div>
-                </section>
-            </div>
+      <h2 className="dashboard-section-title">Quick Search</h2>
+      <ClientSearchForm onSearch={handleSearch} isLoading={isLoading} />
 
-        </div>
-    );
+      {error && <p className="dashboard-error">{error}</p>}
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && hasSearched && (
+        <ClientList clients={clients} eligibilityMap={eligibilityMap} />
+      )}
+    </div>
+  );
 }

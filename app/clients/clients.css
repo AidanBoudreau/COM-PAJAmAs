@@ -1,95 +1,53 @@
-.clientsContainer {
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-}
-.clientsSection {
-  width: 450px;
+.clients-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 100px;
 }
 
-.clientsHeaderRow {
+.clients-header {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  margin: 6px 6px 12px;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.clientsTitle {
-  margin: 0;
+.clients-header h1 {
   font-size: 24px;
-  font-weight: 600;
-}
-
-.clientsRightLabel {
-  font-size: 14px;
-  letter-spacing: 0.18em;
-  color: rgba(0, 0, 0, 0.55);
   font-weight: 700;
+  color: #373737;
+  margin: 0;
 }
 
-.clientsList {
+.add-client-button {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.clientRow {
+  align-items: center;
+  gap: 6px;
+  background: #0084ff;
+  color: #fff;
   text-decoration: none;
-  color: inherit;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-  border-radius: 16px;
-
-  padding: 10px 18px;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s ease;
 }
 
-.clientRow:active {
-  transform: translateY(1px);
+.add-client-button:hover {
+  background: #006acc;
 }
 
-.clientLeft {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  min-width: 0;
+.clients-error {
+  color: #c0392b;
+  background: #fdeaea;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 16px;
 }
 
-.clientNumber {
-  width: 34px;
-  font-size: 18px;
-  font-weight: 900;
-  color: #1d5cff;
-}
-
-.clientAvatarWrap {
-  position: relative;
-  width: 35px;
-  height: 35px;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 3px solid rgba(29, 92, 255, 0.22);
-  flex: 0 0 auto;
-}
-
-.clientAvatar {
-  object-fit: cover;
-}
-
-.clientName {
-  font-size: 20px;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.clientChevron {
-  color: rgba(0, 0, 0, 0.35);
-  flex: 0 0 auto;
+.clients-hint {
+  text-align: center;
+  color: #999;
+  padding: 40px 0;
+  font-size: 14px;
 }
