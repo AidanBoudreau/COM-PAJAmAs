@@ -4,19 +4,19 @@ import { useState } from "react";
 import "./ClientSearchForm.css";
 
 interface ClientSearchFormProps {
-  onSearch: (lastName: string, DOB: string, firstName?: string) => void;
+  onSearch: (lastName: string, dob: string, firstName?: string) => void;
   isLoading: boolean;
 }
 
 export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFormProps) {
   const [lastName, setLastName] = useState("");
-  const [DOB, setDOB] = useState("");
+  const [dob, setdob] = useState("");
   const [firstName, setFirstName] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!lastName.trim() || !DOB) return;
-    onSearch(lastName.trim(), DOB, firstName.trim() || undefined);
+    if (!lastName.trim() || !dob) return;
+    onSearch(lastName.trim(), dob, firstName.trim() || undefined);
   }
 
   return (
@@ -34,13 +34,13 @@ export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFo
           />
         </div>
         <div className="search-field">
-          <label htmlFor="DOB">Date of Birth *</label>
+          <label htmlFor="dob">Date of Birth *</label>
           <input
-            id="DOB"
+            id="dob"
             type="text"
             placeholder="MM-DD-YYYY"
-            value={DOB}
-            onChange={(e) => setDOB(e.target.value)}
+            value={dob}
+            onChange={(e) => setdob(e.target.value)}
             required
           />
         </div>

@@ -20,7 +20,7 @@ export default function ClientCard({ client, eligibility }: ClientCardProps) {
           {client.firstName} {client.lastName}
         </div>
         <div className="client-card-details">
-          <span>DOB: {client.DOB}</span>
+          <span>dob: {client.dob}</span>
           <span className="client-card-separator">|</span>
           <span>${client.amount.toFixed(2)}</span>
           <span className="client-card-separator">|</span>

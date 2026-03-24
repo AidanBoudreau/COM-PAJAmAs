@@ -28,8 +28,8 @@ async function apiFetch<T>(url: string, options?: RequestInit): Promise<T> {
   return json.data;
 }
 
-export async function searchClients(lastName: string, DOB: string): Promise<ClientRecord[]> {
-  const params = new URLSearchParams({ lastName, DOB });
+export async function searchClients(lastName: string, dob: string): Promise<ClientRecord[]> {
+  const params = new URLSearchParams({ lastName, dob });
   return apiFetch<ClientRecord[]>(`/api/clients/search?${params}`);
 }
 
@@ -49,7 +49,7 @@ export async function getEligibility(clientId: string): Promise<EligibilityResul
 export async function createClient(data: {
   firstName: string;
   lastName: string;
-  DOB: string;
+  dob: string;
   amount: number;
   purpose: string;
   lastHelpedDate: string;

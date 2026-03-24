@@ -12,7 +12,7 @@ export default function NewClientPage() {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
-    DOB: "",
+    dob: "",
     amount: "",
     purpose: "",
     lastHelpedDate: today,
@@ -33,7 +33,7 @@ export default function NewClientPage() {
       const result = await createClient({
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
-        DOB: form.DOB,
+        dob: form.dob,
         amount: parseFloat(form.amount),
         purpose: form.purpose.trim(),
         lastHelpedDate: form.lastHelpedDate,
@@ -85,8 +85,8 @@ export default function NewClientPage() {
                 id="dob"
                 type="text"
                 placeholder="MM-DD-YYYY"
-                value={form.DOB}
-                onChange={(e) => updateField("DOB", e.target.value)}
+                value={form.dob}
+                onChange={(e) => updateField("dob", e.target.value)}
                 required
               />
             </div>

@@ -48,7 +48,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
     setEditData({
       firstName: client.firstName,
       lastName: client.lastName,
-      DOB: client.DOB,
+      dob: client.dob,
       amount: client.amount,
       purpose: client.purpose,
     });
@@ -65,7 +65,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
       const updates: Record<string, unknown> = {};
       if (editData.firstName !== client.firstName) updates.firstName = editData.firstName;
       if (editData.lastName !== client.lastName) updates.lastName = editData.lastName;
-      if (editData.DOB !== client.DOB) updates.DOB = editData.DOB;
+      if (editData.dob !== client.dob) updates.dob = editData.dob;
       if (editData.amount !== client.amount) updates.amount = editData.amount;
       if (editData.purpose !== client.purpose) updates.purpose = editData.purpose;
 
@@ -119,7 +119,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
               </div>
               <div className="detail-field">
                 <span className="detail-label">Date of Birth</span>
-                <span className="detail-value">{client.DOB}</span>
+                <span className="detail-value">{client.dob}</span>
               </div>
               <div className="detail-field">
                 <span className="detail-label">Amount</span>
@@ -172,8 +172,8 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
                 <input
                   type="text"
                   placeholder="MM-DD-YYYY"
-                  value={editData.DOB ?? ""}
-                  onChange={(e) => setEditData({ ...editData, DOB: e.target.value })}
+                  value={editData.dob ?? ""}
+                  onChange={(e) => setEditData({ ...editData, dob: e.target.value })}
                 />
               </div>
               <div className="detail-field">

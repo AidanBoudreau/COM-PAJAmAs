@@ -8,7 +8,7 @@ export class ValidationError extends Error {
 export interface CreateClientInput {
   firstName: string;
   lastName: string;
-  DOB: string;
+  dob: string;
   amount: number;
   purpose: string;
   lastHelpedDate: string;
@@ -17,7 +17,7 @@ export interface CreateClientInput {
 export interface UpdateClientInput {
   firstName?: string;
   lastName?: string;
-  DOB?: string;
+  dob?: string;
   amount?: number;
   purpose?: string;
   lastHelpedDate?: string;
@@ -45,9 +45,9 @@ interface SearchByIdInput {
 }
 
 interface SearchByNameDobInput {
-  mode: "lastNameDOB";
+  mode: "lastNamedob";
   lastName: string;
-  DOB: string;
+  dob: string;
 }
 
 export type SearchInput = SearchByIdInput | SearchByNameDobInput;
@@ -141,7 +141,7 @@ export function validateCreateClientInput(payload: unknown): CreateClientInput {
   return {
     firstName: parseRequiredString(body.firstName, "firstName"),
     lastName: parseRequiredString(body.lastName, "lastName"),
-    DOB: parseDate(body.DOB, "DOB"),
+    dob: parseDate(body.dob, "dob"),
     amount: parsePositiveNumber(body.amount, "amount"),
     purpose: parseRequiredString(body.purpose, "purpose"),
     lastHelpedDate: parseDate(body.lastHelpedDate, "lastHelpedDate"),
@@ -153,7 +153,7 @@ export function validateUpdateClientInput(payload: unknown): UpdateClientInput {
   const updates: UpdateClientInput = {
     firstName: parseOptionalString(body.firstName, "firstName"),
     lastName: parseOptionalString(body.lastName, "lastName"),
-    DOB: parseOptionalDate(body.DOB, "DOB"),
+    dob: parseOptionalDate(body.dob, "dob"),
     amount: parseOptionalPositiveNumber(body.amount, "amount"),
     purpose: parseOptionalString(body.purpose, "purpose"),
     lastHelpedDate: parseOptionalDate(body.lastHelpedDate, "lastHelpedDate"),
@@ -232,24 +232,24 @@ export function validateSearchInput(searchParams: URLSearchParams): SearchInput 
   }
 
   const lastName = searchParams.get("lastName");
-  const DOB = searchParams.get("DOB");
+  const dob = searchParams.get("dob");
 
   if (!lastName || lastName.trim() === "") {
     throw new ValidationError("lastName is required when clientId is not provided.");
   }
 
-  if (!DOB || DOB.trim() === "") {
-    throw new ValidationError("DOB is required when clientId is not provided.");
+  if (!dob || dob.trim() === "") {
+    throw new ValidationError("dob is required when clientId is not provided.");
   }
 
-  if (!isValidDateString(DOB)) {
-    throw new ValidationError("DOB must be a valid date in YYYY-MM-DD format.");
+  if (!isValidDateString(dob)) {
+    throw new ValidationError("dob must be a valid date in YYYY-MM-DD format.");
   }
 
   return {
-    mode: "lastNameDOB",
+    mode: "lastNamedob",
     lastName: lastName.trim(),
-    DOB: DOB.trim(),
+    dob: dob.trim(),
   };
 }
 

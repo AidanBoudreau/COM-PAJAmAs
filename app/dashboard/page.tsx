@@ -18,13 +18,13 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
-  async function handleSearch(lastName: string, DOB: string, firstName?: string) {
+  async function handleSearch(lastName: string, dob: string, firstName?: string) {
     setIsLoading(true);
     setError("");
     setHasSearched(true);
 
     try {
-      let results = await searchClients(lastName, DOB);
+      let results = await searchClients(lastName, dob);
       if (firstName) {
         results = results.filter((c) =>
           c.firstName.toLowerCase().includes(firstName.toLowerCase())

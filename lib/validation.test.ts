@@ -15,7 +15,7 @@ describe("validation helpers", () => {
     const payload = validateCreateClientInput({
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 100,
       purpose: "Rent assistance",
       lastHelpedDate: "2025-01-01",
@@ -24,7 +24,7 @@ describe("validation helpers", () => {
     expect(payload).toEqual({
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 100,
       purpose: "Rent assistance",
       lastHelpedDate: "2025-01-01",
@@ -36,7 +36,7 @@ describe("validation helpers", () => {
       validateCreateClientInput({
         firstName: "John",
         lastName: "Smith",
-        DOB: "2025-13-01",
+        dob: "2025-13-01",
         amount: 10,
         purpose: "Food",
         lastHelpedDate: "2025-01-01",
@@ -77,8 +77,8 @@ describe("validation helpers", () => {
     const byId = validateSearchInput(new URLSearchParams("clientId=abc-123"));
     expect(byId).toEqual({ mode: "clientId", clientId: "abc-123" });
 
-    const byName = validateSearchInput(new URLSearchParams("lastName=Smith&DOB=1990-01-01"));
-    expect(byName).toEqual({ mode: "lastNameDOB", lastName: "Smith", DOB: "1990-01-01" });
+    const byName = validateSearchInput(new URLSearchParams("lastName=Smith&dob=1990-01-01"));
+    expect(byName).toEqual({ mode: "lastNamedob", lastName: "Smith", dob: "1990-01-01" });
 
     expect(() => validateSearchInput(new URLSearchParams("lastName=Smith"))).toThrow(
       ValidationError,

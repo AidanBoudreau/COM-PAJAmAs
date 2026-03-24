@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       return successResponse(client ? [client] : []);
     }
 
-    const results = await searchClientsByLastNameAndDob(searchInput.lastName, searchInput.DOB);
+    const results = await searchClientsByLastNameAndDob(searchInput.lastName, searchInput.dob);
     return successResponse(results);
   } catch (error) {
     return handleRouteError(error);

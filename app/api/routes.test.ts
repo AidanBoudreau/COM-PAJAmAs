@@ -80,7 +80,7 @@ describe("API route smoke tests", () => {
       body: JSON.stringify({
         firstName: "John",
         lastName: "Smith",
-        DOB: "1990-01-01",
+        dob: "1990-01-01",
         amount: 50,
         purpose: "Food",
         lastHelpedDate: "2026-01-01",
@@ -119,7 +119,7 @@ describe("API route smoke tests", () => {
         body: JSON.stringify({
           firstName: "Jane",
           lastName: "Doe",
-          DOB: "1990-01-01",
+          dob: "1990-01-01",
           amount: 10,
           purpose: "Food",
           lastHelpedDate: "2026-01-01",
@@ -135,7 +135,7 @@ describe("API route smoke tests", () => {
       clientId: "abc",
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 75,
       purpose: "Food",
       lastHelpedDate: "2025-01-01",
@@ -144,7 +144,7 @@ describe("API route smoke tests", () => {
       clientId: "abc",
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 100,
       purpose: "Utilities",
       lastHelpedDate: "2025-01-01",
@@ -187,7 +187,7 @@ describe("API route smoke tests", () => {
         clientId: "abc",
         firstName: "John",
         lastName: "Smith",
-        DOB: "1990-01-01",
+        dob: "1990-01-01",
         amount: 50,
         purpose: "Food",
         lastHelpedDate: "2025-01-01",
@@ -195,7 +195,7 @@ describe("API route smoke tests", () => {
     ]);
 
     const response = await searchClientsRoute(
-      new Request("http://localhost/api/clients/search?lastName=Smith&DOB=1990-01-01"),
+      new Request("http://localhost/api/clients/search?lastName=Smith&dob=1990-01-01"),
     );
     expect(response.status).toBe(200);
 
@@ -210,7 +210,7 @@ describe("API route smoke tests", () => {
       clientId: "abc",
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 50,
       purpose: "Food",
       lastHelpedDate: "2025-01-01",
@@ -233,7 +233,7 @@ describe("API route smoke tests", () => {
       clientId: "abc",
       firstName: "John",
       lastName: "Smith",
-      DOB: "1990-01-01",
+      dob: "1990-01-01",
       amount: 75,
       purpose: "Utilities",
       lastHelpedDate: "2026-03-01",

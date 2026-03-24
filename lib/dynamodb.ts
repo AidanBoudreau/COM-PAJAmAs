@@ -13,7 +13,7 @@ export interface ClientRecord {
   clientId: string;
   firstName: string;
   lastName: string;
-  DOB: string;
+  dob: string;
   amount: number;
   purpose: string;
   lastHelpedDate: string;
@@ -43,7 +43,7 @@ export interface SafeUserRecord {
 
 const DEFAULT_ELIGIBILITY_WINDOW_DAYS = 365;
 const ELIGIBILITY_CONFIG_KEY = "eligibility";
-const LAST_NAME_DOB_INDEX = "lastName-DOB-index";
+const LAST_NAME_DOB_INDEX = "lastName-dob-index";
 
 function getRequiredEnv(name: string) {
   const value = process.env[name];
@@ -112,7 +112,7 @@ export async function getClientById(clientId: string) {
   return (response.Item as ClientRecord | undefined) ?? null;
 }
 
-export async function searchClientsByLastNameAndDob(lastName: string, DOB: string) {
+export async function searchClientsByLastNameAndDob(lastName: string, dob: string) {
   const response = await getDocumentClient().send(
     new QueryCommand({
       TableName: getClientsTableName(),
@@ -120,11 +120,11 @@ export async function searchClientsByLastNameAndDob(lastName: string, DOB: strin
       KeyConditionExpression: "#lastName = :lastName AND #dob = :dob",
       ExpressionAttributeNames: {
         "#lastName": "lastName",
-        "#dob": "DOB",
+        "#dob": "dob",
       },
       ExpressionAttributeValues: {
         ":lastName": lastName,
-        ":dob": DOB,
+        ":dob": dob,
       },
     }),
   );
