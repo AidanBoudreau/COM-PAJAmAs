@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatIsoDateInput } from "@/lib/dateInput";
 import "./ClientSearchForm.css";
 
 interface ClientSearchFormProps {
@@ -38,9 +39,11 @@ export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFo
           <input
             id="dob"
             type="text"
-            placeholder="MM-DD-YYYY"
+            placeholder="YYYY-MM-DD (e.g. 0000-00-00)"
             value={dob}
-            onChange={(e) => setdob(e.target.value)}
+            onChange={(e) => setdob(formatIsoDateInput(e.target.value))}
+            inputMode="numeric"
+            maxLength={10}
             required
           />
         </div>

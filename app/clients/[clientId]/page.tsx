@@ -8,6 +8,7 @@ import Modal from "@/components/Modal";
 import RecordHelpForm from "@/components/RecordHelpForm";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { getClient, getEligibility, updateClient } from "@/lib/apiClient";
+import { formatIsoDateInput } from "@/lib/dateInput";
 import type { ClientRecord } from "@/lib/dynamodb";
 import type { EligibilityResult } from "@/lib/apiClient";
 import "./client-detail.css";
@@ -28,12 +29,15 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
   useEffect(() => {
     async function load() {
       try {
-        const [clientData, eligData] = await Promise.all([
-          getClient(clientId),
-          getEligibility(clientId),
-        ]);
+        const clientData = await getClient(clientId);
         setClient(clientData);
-        setEligibility(eligData);
+
+        try {
+          const eligData = await getEligibility(clientId);
+          setEligibility(eligData);
+        } catch {
+          setEligibility(null);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load client.");
       } finally {
@@ -171,9 +175,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
                 <label className="detail-label">Date of Birth</label>
                 <input
                   type="text"
-                  placeholder="MM-DD-YYYY"
+                  placeholder="YYYY-MM-DD (e.g. 0000-00-00)"
                   value={editData.dob ?? ""}
-                  onChange={(e) => setEditData({ ...editData, dob: e.target.value })}
+                  onChange={(e) =>
+                    setEditData({ ...editData, dob: formatIsoDateInput(e.target.value) })
+                  }
+                  inputMode="numeric"
+                  maxLength={10}
                 />
               </div>
               <div className="detail-field">

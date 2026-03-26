@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/apiClient";
+import { formatIsoDateInput } from "@/lib/dateInput";
 import "./new-client.css";
 
 export default function NewClientPage() {
@@ -84,9 +85,11 @@ export default function NewClientPage() {
               <input
                 id="dob"
                 type="text"
-                placeholder="MM-DD-YYYY"
+                placeholder="YYYY-MM-DD (e.g. 0000-00-00)"
                 value={form.dob}
-                onChange={(e) => updateField("dob", e.target.value)}
+                onChange={(e) => updateField("dob", formatIsoDateInput(e.target.value))}
+                inputMode="numeric"
+                maxLength={10}
                 required
               />
             </div>
