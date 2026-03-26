@@ -1,14 +1,25 @@
 .navbar {
+  position: sticky;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border-soft);
+  z-index: 100;
 }
 
 .navbar-logo {
   display: flex;
   align-items: center;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .text-logo {
@@ -22,25 +33,48 @@
 
 .nav-user-btn {
   background: none;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  color: #373737;
-  padding: 4px;
+  color: var(--text-strong);
+  padding: 6px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
 }
 
 .nav-user-btn:hover {
-  color: #0084ff;
+  color: var(--primary);
+  background: var(--surface-soft);
+  border-color: var(--border-soft);
+}
+
+.nav-theme-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  color: var(--text-strong);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.nav-theme-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.97);
 }
 
 .nav-user-menu {
   position: absolute;
   top: 100%;
   right: 0;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-soft);
   min-width: 180px;
   padding: 8px 0;
   z-index: 100;
@@ -50,8 +84,8 @@
 .nav-user-email {
   padding: 8px 16px;
   font-size: 13px;
-  color: #999;
-  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .nav-user-logout {
@@ -63,11 +97,11 @@
   background: none;
   border: none;
   font-size: 14px;
-  color: #c0392b;
+  color: var(--danger);
   cursor: pointer;
   text-align: left;
 }
 
 .nav-user-logout:hover {
-  background: #fdeaea;
+  background: var(--danger-bg);
 }

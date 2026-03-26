@@ -12,9 +12,10 @@
 }
 
 .clients-header h1 {
-  font-size: 24px;
-  font-weight: 700;
-  color: #373737;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
   margin: 0;
 }
 
@@ -22,23 +23,25 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #0084ff;
-  color: #fff;
+  background: linear-gradient(125deg, var(--primary), #149283);
+  color: var(--surface);
   text-decoration: none;
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
 .add-client-button:hover {
-  background: #006acc;
+  transform: translateY(-1px);
+  filter: brightness(0.96);
 }
 
 .clients-error {
-  color: #c0392b;
-  background: #fdeaea;
+  color: var(--danger);
+  background: var(--danger-bg);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;
@@ -47,7 +50,7 @@
 
 .clients-hint {
   text-align: center;
-  color: #999;
+  color: var(--text-muted);
   padding: 40px 0;
   font-size: 14px;
 }

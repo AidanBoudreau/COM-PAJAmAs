@@ -8,16 +8,16 @@
 }
 
 .eligibility-badge.eligible {
-  background: #e6f9ed;
-  color: #1a7a3a;
+  background: var(--success-soft);
+  color: var(--success);
 }
 
 .eligibility-badge.ineligible {
-  background: #fdeaea;
-  color: #c0392b;
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
 .eligibility-badge.loading {
-  background: #f0f0f0;
-  color: #999;
+  background: var(--border-soft);
+  color: var(--text-muted);
 }

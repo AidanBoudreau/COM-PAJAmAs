@@ -16,7 +16,7 @@
 .reports-header h1 {
   font-size: 24px;
   font-weight: 700;
-  color: #373737;
+  color: var(--text-strong);
   margin: 0;
 }
 
@@ -28,17 +28,17 @@
 
 .reports-year-select {
   padding: 8px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: 14px;
-  color: #373737;
-  background: #fff;
+  color: var(--text-strong);
+  background: var(--surface);
   cursor: pointer;
 }
 
 .reports-year-select:focus {
   outline: none;
-  border-color: #0084ff;
+  border-color: var(--primary);
 }
 
 .reports-download-btn {
@@ -46,8 +46,8 @@
   align-items: center;
   gap: 6px;
   padding: 8px 14px;
-  background: #27ae60;
-  color: #fff;
+  background: var(--success);
+  color: var(--surface);
   border: none;
   border-radius: 8px;
   font-size: 13px;
@@ -56,12 +56,12 @@
 }
 
 .reports-download-btn:hover {
-  background: #219a52;
+  background: var(--success-strong);
 }
 
 .reports-error {
-  color: #c0392b;
-  background: #fdeaea;
+  color: var(--danger);
+  background: var(--danger-bg);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;

@@ -5,10 +5,11 @@
 }
 
 .dashboard-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #373737;
-  margin: 0 0 20px;
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+  margin: 0 0 22px;
 }
 
 .dashboard-actions {
@@ -25,29 +26,33 @@
   justify-content: center;
   gap: 8px;
   padding: 20px 12px;
-  background: #0084ff;
-  color: #fff;
-  border-radius: 12px;
+  background: linear-gradient(125deg, var(--primary), #149283);
+  color: var(--surface);
+  border: 1px solid transparent;
+  border-radius: 14px;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
-  transition: background 0.15s ease;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
 }
 
 .dashboard-action-card:hover {
-  background: #006acc;
+  transform: translateY(-2px);
+  filter: brightness(0.96);
+  box-shadow: var(--shadow-md);
 }
 
 .dashboard-section-title {
   font-size: 18px;
   font-weight: 600;
-  color: #373737;
+  color: var(--text-strong);
   margin: 0 0 12px;
 }
 
 .dashboard-error {
-  color: #c0392b;
-  background: #fdeaea;
+  color: var(--danger);
+  background: var(--danger-bg);
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;

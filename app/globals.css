@@ -1,8 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #f6f4ee;
+  --foreground: #1f2c25;
+  --surface: #ffffff;
+  --surface-soft: #fdfcf9;
+  --text-strong: #1f2c25;
+  --text-dim: #44554d;
+  --text-muted: #6a7a72;
+  --border: #d6e1da;
+  --border-soft: #e5ece8;
+  --primary: #0f766e;
+  --primary-strong: #0a5c56;
+  --primary-soft: #e0f4f1;
+  --success: #1f7a50;
+  --success-strong: #196243;
+  --success-soft: #e5f5eb;
+  --danger: #9e2b2b;
+  --danger-bg: #fde8e8;
+  --disabled: #9da8a2;
+  --shadow-sm: 0 8px 20px rgba(16, 40, 33, 0.08);
+  --shadow-md: 0 14px 30px rgba(16, 40, 33, 0.12);
+  --focus-ring: 0 0 0 3px rgba(15, 118, 110, 0.18);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0e1714;
+  --foreground: #e4efe9;
+  --surface: #13201c;
+  --surface-soft: #1a2a24;
+  --text-strong: #e4efe9;
+  --text-dim: #bfd1c9;
+  --text-muted: #95ada3;
+  --border: #2a3f38;
+  --border-soft: #22352f;
+  --primary: #2ec4b6;
+  --primary-strong: #1fa89a;
+  --primary-soft: #123d38;
+  --success: #58d68d;
+  --success-strong: #38b26f;
+  --success-soft: #153b2a;
+  --danger: #ff8a8a;
+  --danger-bg: #3a2020;
+  --disabled: #5d6d67;
+  --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 14px 30px rgba(0, 0, 0, 0.45);
+  --focus-ring: 0 0 0 3px rgba(46, 196, 182, 0.25);
 }
 
 @theme inline {
@@ -12,15 +57,35 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background:
+    radial-gradient(1200px 600px at 5% -10%, #d8eee6 0%, transparent 55%),
+    radial-gradient(900px 500px at 95% -5%, #efe6cf 0%, transparent 60%),
+    var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), "Segoe UI", sans-serif;
+  min-height: 100vh;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+[data-theme="dark"] body {
+  background:
+    radial-gradient(1200px 600px at 5% -10%, #18352f 0%, transparent 55%),
+    radial-gradient(900px 500px at 95% -5%, #3b3525 0%, transparent 60%),
+    var(--background);
+}
+
+a {
+  color: inherit;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+::selection {
+  background: #b8e4dd;
+  color: #10261f;
 }

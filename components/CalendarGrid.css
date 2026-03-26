@@ -1,5 +1,5 @@
 .cal-grid-wrapper {
-  background: #fff;
+  background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   padding: 16px;
@@ -16,7 +16,7 @@
   text-align: center;
   font-size: 12px;
   font-weight: 600;
-  color: #999;
+  color: var(--text-muted);
   padding: 8px 0;
   text-transform: uppercase;
 }
@@ -37,7 +37,7 @@
 }
 
 .cal-day:hover {
-  background: #f0f4ff;
+  background: var(--primary-soft);
 }
 
 .cal-day.empty {
@@ -51,32 +51,32 @@
 .cal-day-number {
   font-size: 14px;
   font-weight: 500;
-  color: #373737;
+  color: var(--text-strong);
 }
 
 .cal-day.today .cal-day-number {
-  color: #0084ff;
+  color: var(--primary);
   font-weight: 700;
 }
 
 .cal-day.selected {
-  background: #0084ff;
+  background: var(--primary);
 }
 
 .cal-day.selected .cal-day-number {
-  color: #fff;
+  color: var(--surface);
 }
 
 .cal-day.selected .cal-day-dot {
-  background: #fff;
-  color: #0084ff;
+  background: var(--surface);
+  color: var(--primary);
 }
 
 .cal-day-dot {
   position: absolute;
   bottom: 4px;
-  background: #0084ff;
-  color: #fff;
+  background: var(--primary);
+  color: var(--surface);
   font-size: 9px;
   font-weight: 700;
   width: 16px;
@@ -88,11 +88,11 @@
 }
 
 .cal-day.has-clients {
-  background: #f0f8ff;
+  background: var(--primary-soft);
 }
 
 .cal-day.has-clients:hover {
-  background: #e0f0ff;
+  background: #cdece6;
 }
 
 @media (max-width: 420px) {
