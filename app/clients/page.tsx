@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
-import { UserRoundPlus } from "lucide-react";
+import { UserRoundPlus, ChevronRight } from "lucide-react";
 import ClientSearchForm from "@/components/ClientSearchForm";
 import ClientList from "@/components/ClientList";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { searchClients, getEligibility } from "@/lib/apiClient";
+import { searchClients, getEligibility, getAllClients } from "@/lib/apiClient";
 import type { ClientRecord } from "@/lib/dynamodb";
 import type { EligibilityResult } from "@/lib/apiClient";
 import "./clients.css";
@@ -17,6 +17,42 @@ export default function ClientsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
+  const [allClients, setAllClients] = useState<ClientRecord[]>([]);
+
+  useEffect(() => {
+    getAllClients().then((data) => {
+      const sorted = [...data].sort((a, b) =>
+        a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName)
+      );
+      setAllClients(sorted);
+    }).catch(() => {});
+  }, []);
+
+  const groupedClients = useMemo(() => {
+    const groups: { letter: string; clients: ClientRecord[] }[] = [];
+    const misc: ClientRecord[] = [];
+
+    for (const client of allClients) {
+      const first = client.lastName.charAt(0).toUpperCase();
+      const isLetter = first >= "A" && first <= "Z";
+      if (!isLetter) {
+        misc.push(client);
+        continue;
+      }
+      const existing = groups.find((g) => g.letter === first);
+      if (existing) {
+        existing.clients.push(client);
+      } else {
+        groups.push({ letter: first, clients: [client] });
+      }
+    }
+
+    if (misc.length > 0) {
+      groups.push({ letter: "#", clients: misc });
+    }
+
+    return groups;
+  }, [allClients]);
 
   async function handleSearch(lastName: string, dob: string, firstName?: string) {
     setIsLoading(true);
@@ -74,6 +110,34 @@ export default function ClientsPage() {
 
       {!hasSearched && (
         <p className="clients-hint">Search for clients by last name and date of birth.</p>
+      )}
+
+      {groupedClients.length > 0 && (
+        <div className="all-clients-list">
+          <h2 className="all-clients-title">All Clients</h2>
+          <div className="all-clients-scroll">
+            {groupedClients.map(({ letter, clients: group }) => (
+              <div key={letter} className="all-clients-group">
+                <div className="all-clients-letter">{letter}</div>
+                <div className="all-clients-group-rows">
+                  {group.map((client) => (
+                    <Link
+                      key={client.clientId}
+                      href={`/clients/${client.clientId}`}
+                      className="all-clients-row"
+                    >
+                      <div className="all-clients-row-info">
+                        <span className="all-clients-name">{client.lastName}, {client.firstName}</span>
+                        <span className="all-clients-dob">DOB: {client.dob}</span>
+                      </div>
+                      <ChevronRight size={18} className="all-clients-chevron" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );

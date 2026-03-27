@@ -4,7 +4,6 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   PutCommand,
-  QueryCommand,
   ScanCommand,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
@@ -43,7 +42,6 @@ export interface SafeUserRecord {
 
 const DEFAULT_ELIGIBILITY_WINDOW_DAYS = 365;
 const ELIGIBILITY_CONFIG_KEY = "eligibility";
-const LAST_NAME_DOB_INDEX = "lastName-dob-index";
 
 function getRequiredEnv(name: string) {
   const value = process.env[name];
@@ -113,23 +111,29 @@ export async function getClientById(clientId: string) {
 }
 
 export async function searchClientsByLastNameAndDob(lastName: string, dob: string) {
-  const response = await getDocumentClient().send(
-    new QueryCommand({
-      TableName: getClientsTableName(),
-      IndexName: LAST_NAME_DOB_INDEX,
-      KeyConditionExpression: "#lastName = :lastName AND #dob = :dob",
-      ExpressionAttributeNames: {
-        "#lastName": "lastName",
-        "#dob": "dob",
-      },
-      ExpressionAttributeValues: {
-        ":lastName": lastName,
-        ":dob": dob,
-      },
-    }),
-  );
+  const clients: ClientRecord[] = [];
+  let exclusiveStartKey: Record<string, unknown> | undefined;
+  const lastNameLower = lastName.toLowerCase();
 
-  return (response.Items as ClientRecord[] | undefined) ?? [];
+  do {
+    const response = await getDocumentClient().send(
+      new ScanCommand({
+        TableName: getClientsTableName(),
+        ExclusiveStartKey: exclusiveStartKey,
+      }),
+    );
+
+    const items = (response.Items as ClientRecord[] | undefined) ?? [];
+    for (const item of items) {
+      if (item.lastName.toLowerCase() === lastNameLower && item.dob === dob) {
+        clients.push(item);
+      }
+    }
+
+    exclusiveStartKey = response.LastEvaluatedKey as Record<string, unknown> | undefined;
+  } while (exclusiveStartKey);
+
+  return clients;
 }
 
 type UpdatableClientFields = Omit<ClientRecord, "clientId">;
@@ -322,6 +326,25 @@ export async function deleteUserById(userId: string) {
 
     throw error;
   }
+}
+
+export async function getAllClients(): Promise<ClientRecord[]> {
+  const clients: ClientRecord[] = [];
+  let exclusiveStartKey: Record<string, unknown> | undefined;
+
+  do {
+    const response = await getDocumentClient().send(
+      new ScanCommand({
+        TableName: getClientsTableName(),
+        ExclusiveStartKey: exclusiveStartKey,
+      }),
+    );
+
+    clients.push(...((response.Items as ClientRecord[] | undefined) ?? []));
+    exclusiveStartKey = response.LastEvaluatedKey as Record<string, unknown> | undefined;
+  } while (exclusiveStartKey);
+
+  return clients;
 }
 
 export async function scanClientsByDateRange(

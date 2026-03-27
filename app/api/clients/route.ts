@@ -1,8 +1,18 @@
 import { randomUUID } from "crypto";
 import { errorResponse, handleRouteError, successResponse } from "@/lib/apiResponse";
 import { requireSession } from "@/lib/auth";
-import { createClient, isConditionalCheckFailed } from "@/lib/dynamodb";
+import { createClient, getAllClients, isConditionalCheckFailed } from "@/lib/dynamodb";
 import { validateCreateClientInput } from "@/lib/validation";
+
+export async function GET() {
+  try {
+    await requireSession();
+    const clients = await getAllClients();
+    return successResponse(clients);
+  } catch (error) {
+    return handleRouteError(error);
+  }
+}
 
 export const runtime = "nodejs";
 

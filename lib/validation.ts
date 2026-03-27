@@ -238,18 +238,16 @@ export function validateSearchInput(searchParams: URLSearchParams): SearchInput 
     throw new ValidationError("lastName is required when clientId is not provided.");
   }
 
-  if (!dob || dob.trim() === "") {
-    throw new ValidationError("dob is required when clientId is not provided.");
-  }
+  const resolvedDob = (!dob || dob.trim() === "") ? "0000-00-00" : dob.trim();
 
-  if (!isValidDateString(dob)) {
+  if (!isValidDateString(resolvedDob)) {
     throw new ValidationError("dob must be a valid date in YYYY-MM-DD format.");
   }
 
   return {
     mode: "lastNamedob",
     lastName: lastName.trim(),
-    dob: dob.trim(),
+    dob: resolvedDob,
   };
 }
 

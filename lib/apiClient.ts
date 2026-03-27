@@ -83,6 +83,10 @@ export async function recordHelp(
   });
 }
 
+export async function getAllClients(): Promise<ClientRecord[]> {
+  return apiFetch<ClientRecord[]>("/api/clients");
+}
+
 export async function getClientsByDateRange(
   start: string,
   end: string,

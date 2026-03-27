@@ -16,7 +16,7 @@ export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFo
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!lastName.trim() || !dob) return;
+    if (!lastName.trim()) return;
     onSearch(lastName.trim(), dob, firstName.trim() || undefined);
   }
 
@@ -35,16 +35,15 @@ export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFo
           />
         </div>
         <div className="search-field">
-          <label htmlFor="dob">Date of Birth *</label>
+          <label htmlFor="dob">Date of Birth</label>
           <input
             id="dob"
             type="text"
-            placeholder="YYYY-MM-DD (e.g. 0000-00-00)"
+            placeholder="YYYY-MM-DD"
             value={dob}
             onChange={(e) => setdob(formatIsoDateInput(e.target.value))}
             inputMode="numeric"
             maxLength={10}
-            required
           />
         </div>
         <div className="search-field">
@@ -52,7 +51,7 @@ export default function ClientSearchForm({ onSearch, isLoading }: ClientSearchFo
           <input
             id="firstName"
             type="text"
-            placeholder="First name (optional)"
+            placeholder="First name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
