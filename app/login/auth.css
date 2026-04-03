@@ -1,8 +1,9 @@
 #authContainer {
-  background-color: rgb(251, 249, 239);
-  border: 2px #b0b0b0 solid;
-  border-radius: 6px;
-  color: #373737;
+  background-color: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  color: var(--text-strong);
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -33,11 +34,11 @@
 }
 
 #authContainer input {
-  border: none;
+  border: 1px solid var(--border-soft);
   outline: none;
-  background-color: #eaeaea;
-  color: #797979;
-  border-radius: 6px;
+  background-color: var(--border-soft);
+  color: var(--text-dim);
+  border-radius: 10px;
 
   padding-left: 20px;
 
@@ -60,10 +61,10 @@
   margin: 1.5em auto;
   /* margin-top: 1.5em; */
 
-  background-color: #373737;
-  color: white;
+  background: linear-gradient(120deg, var(--primary), #149283);
+  color: var(--surface);
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
 
   height: 50px;
   width: min(100%, 200px);
@@ -84,7 +85,7 @@
 
   background-color: transparent;
   border: none;
-  color: #373737;
+  color: var(--text-strong);
   font-size: 1em;
   cursor: pointer;
 }
@@ -101,5 +102,5 @@
 }
 
 .dev {
-  background-color: rgba(200, 0, 200, 0.2);
+  background-color: rgba(31, 122, 80, 0.1);
 }

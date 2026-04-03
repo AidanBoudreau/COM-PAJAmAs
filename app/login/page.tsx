@@ -1,16 +1,33 @@
 "use client";
 
 import "./auth.css";
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Login() {
-    const router = useRouter();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function signInWithEmail() {
+    setIsSubmitting(true);
+    setErrorMessage("");
+
+    const response = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (response?.error) {
+      setErrorMessage("Invalid email or password.");
+      setIsSubmitting(false);
+      return;
+    }
+
     router.push("/dashboard");
   }
 
@@ -32,20 +49,12 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             ></input>
-            <Link href="/reset-password" className="forgot-pass">
-              Forgot password
-            </Link>
           </div>
         </div>
-        <button className="submitButton" onClick={signInWithEmail}>
+        <button className="submitButton" onClick={signInWithEmail} disabled={isSubmitting}>
           Log In
         </button>
-        <h3>
-          First time? 
-          <Link href="/signup" className="signup-link">
-            <>Sign up!</>
-          </Link>
-        </h3>
+        {errorMessage && <p>{errorMessage}</p>}
       </div>
     </>
   );

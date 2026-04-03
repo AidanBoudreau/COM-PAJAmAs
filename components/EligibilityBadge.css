@@ -1,0 +1,23 @@
+.eligibility-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.eligibility-badge.eligible {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.eligibility-badge.ineligible {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.eligibility-badge.loading {
+  background: var(--border-soft);
+  color: var(--text-muted);
+}

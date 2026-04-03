@@ -1,0 +1,77 @@
+.help-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.help-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+
+.help-field input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-strong);
+  box-sizing: border-box;
+}
+
+.help-field input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: var(--focus-ring);
+}
+
+.help-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+
+.help-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.help-cancel {
+  background: var(--border-soft);
+  color: var(--text-dim);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-cancel:hover {
+  background: var(--border);
+}
+
+.help-submit {
+  background: var(--primary);
+  color: var(--surface);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.help-submit:hover {
+  background: var(--primary-strong);
+}
+
+.help-submit:disabled {
+  background: var(--disabled);
+  cursor: not-allowed;
+}

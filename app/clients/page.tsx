@@ -1,54 +1,144 @@
 "use client";
+
+import { useState, useEffect, useMemo } from "react";
+import Link from "next/link";
+import { UserRoundPlus, ChevronRight } from "lucide-react";
+import ClientSearchForm from "@/components/ClientSearchForm";
+import ClientList from "@/components/ClientList";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { searchClients, getEligibility, getAllClients } from "@/lib/apiClient";
+import type { ClientRecord } from "@/lib/dynamodb";
+import type { EligibilityResult } from "@/lib/apiClient";
 import "./clients.css";
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { clients } from "@/components/data/clients";
-import { UserRoundPlus , User, UsersRound, ChevronRight } from "lucide-react";
+export default function ClientsPage() {
+  const [clients, setClients] = useState<ClientRecord[]>([]);
+  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
+  const [allClients, setAllClients] = useState<ClientRecord[]>([]);
 
-export default function Dashboard() {
-    const top5 = clients.slice(0, 10);
+  useEffect(() => {
+    getAllClients().then((data) => {
+      const sorted = [...data].sort((a, b) =>
+        a.lastName.localeCompare(b.lastName) || a.firstName.localeCompare(b.firstName)
+      );
+      setAllClients(sorted);
+    }).catch(() => {});
+  }, []);
 
-    return (
-        <div className = "dashboardContainer">
+  const groupedClients = useMemo(() => {
+    const groups: { letter: string; clients: ClientRecord[] }[] = [];
+    const misc: ClientRecord[] = [];
 
-            <div className="clientsContainer">
-                <section className="clientsSection">
-                    <div className="clientsHeaderRow">
-                        <h2 className="clientsTitle">All Clients</h2>
-                    </div>
+    for (const client of allClients) {
+      const first = client.lastName.charAt(0).toUpperCase();
+      const isLetter = first >= "A" && first <= "Z";
+      if (!isLetter) {
+        misc.push(client);
+        continue;
+      }
+      const existing = groups.find((g) => g.letter === first);
+      if (existing) {
+        existing.clients.push(client);
+      } else {
+        groups.push({ letter: first, clients: [client] });
+      }
+    }
 
-                    <div className="clientsList">
-                    {top5.map((client, idx) => (
-                        <Link
-                        key={client.id}
-                        href={`/clients/${client.slug}`}
-                        className="clientRow"
-                        >
-                        <div className="clientLeft">
-                            <div className="clientNumber">{idx + 1}.</div>
+    if (misc.length > 0) {
+      groups.push({ letter: "#", clients: misc });
+    }
 
-                            <div className="clientAvatarWrap">
-                            <Image
-                                src={client.photo || "/default-client.png"}
-                                alt={client.name}
-                                fill
-                                className="clientAvatar"
-                                sizes="44px"
-                            />
-                            </div>
+    return groups;
+  }, [allClients]);
 
-                            <div className="clientName">{client.name}</div>
-                        </div>
+  async function handleSearch(lastName: string, dob: string, firstName?: string) {
+    setIsLoading(true);
+    setError("");
+    setHasSearched(true);
 
-                        <ChevronRight className="clientChevron" size={22} />
-                        </Link>
-                    ))}
-                    </div>
-                </section>
-            </div>
+    try {
+      let results = await searchClients(lastName, dob);
 
+      if (firstName) {
+        results = results.filter((c) =>
+          c.firstName.toLowerCase().includes(firstName.toLowerCase())
+        );
+      }
+
+      setClients(results);
+
+      const eligMap: Record<string, EligibilityResult | null> = {};
+      const eligPromises = results.map(async (client) => {
+        try {
+          eligMap[client.clientId] = await getEligibility(client.clientId);
+        } catch {
+          eligMap[client.clientId] = null;
+        }
+      });
+      await Promise.all(eligPromises);
+      setEligibilityMap(eligMap);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Search failed.");
+      setClients([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  return (
+    <div className="clients-page">
+      <div className="clients-header">
+        <h1>Clients</h1>
+        <Link href="/clients/new" className="add-client-button">
+          <UserRoundPlus size={18} />
+          Add Client
+        </Link>
+      </div>
+
+      <ClientSearchForm onSearch={handleSearch} isLoading={isLoading} />
+
+      {error && <p className="clients-error">{error}</p>}
+
+      {isLoading && <LoadingSpinner />}
+
+      {!isLoading && hasSearched && (
+        <ClientList clients={clients} eligibilityMap={eligibilityMap} />
+      )}
+
+      {!hasSearched && (
+        <p className="clients-hint">Search for clients by last name and date of birth.</p>
+      )}
+
+      {groupedClients.length > 0 && (
+        <div className="all-clients-list">
+          <h2 className="all-clients-title">All Clients</h2>
+          <div className="all-clients-scroll">
+            {groupedClients.map(({ letter, clients: group }) => (
+              <div key={letter} className="all-clients-group">
+                <div className="all-clients-letter">{letter}</div>
+                <div className="all-clients-group-rows">
+                  {group.map((client) => (
+                    <Link
+                      key={client.clientId}
+                      href={`/clients/${client.clientId}`}
+                      className="all-clients-row"
+                    >
+                      <div className="all-clients-row-info">
+                        <span className="all-clients-name">{client.lastName}, {client.firstName}</span>
+                        <span className="all-clients-dob">DOB: {client.dob}</span>
+                      </div>
+                      <ChevronRight size={18} className="all-clients-chevron" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 }

@@ -1,59 +1,48 @@
 "use client";
 
 import React from "react";
-
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { House, UsersRound, Calendar, FileBarChart } from "lucide-react";
 import "./Footer.css";
 
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { House, UsersRound, CalendarRange, Calendar, Settings } from "lucide-react";
-
 const Footer: React.FC = () => {
-    const navigate = useRouter();
-    const currentPath = usePathname();
-  
-    function navToAuthPage() {
+  const currentPath = usePathname();
 
-    if (currentPath === "/login" || currentPath === "/signup") {
-      return;
-    }
+  if (currentPath === "/login") return null;
 
-    navigate.push("/login");
-  }
-  const isActive = (href: string) => currentPath === href;
+  const isActive = (href: string) => currentPath.startsWith(href);
 
   return (
     <nav className="bottom-nav">
       <ul className="nav-menu">
         <li>
-          <Link href="/" className="nav-link">
+          <Link href="/dashboard" className={`nav-link ${isActive("/dashboard") ? "active" : ""}`}>
             <House size={20} />
-            Home{isActive("/") ? <hr /> : null}
+            Home
           </Link>
         </li>
-
         <li>
-          <Link href="/clients" className="nav-link">
+          <Link href="/clients" className={`nav-link ${isActive("/clients") ? "active" : ""}`}>
             <UsersRound size={20} />
-            Clients{isActive("/clients") ? <hr /> : null}
+            Clients
           </Link>
         </li>
-
         <li>
-          <Link href="/schedule" className="nav-link">
+          <Link href="/calendar" className={`nav-link ${isActive("/calendar") ? "active" : ""}`}>
             <Calendar size={20} />
-            Schedule{isActive("/schedule") ? <hr /> : null}
+            Calendar
           </Link>
         </li>
         <li>
-          <Link href="/settings" className="nav-link">
-            <Settings size={20} />
-            Settings{isActive("/settings") ? <hr /> : null}
+          <Link href="/reports" className={`nav-link ${isActive("/reports") ? "active" : ""}`}>
+            <FileBarChart size={20} />
+            Reports
           </Link>
         </li>
       </ul>
     </nav>
   );
 };
+
 export default Footer;
