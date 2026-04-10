@@ -199,8 +199,13 @@ describe("API route smoke tests", () => {
     );
     expect(response.status).toBe(200);
 
-    const invalidResponse = await searchClientsRoute(
+    const fallbackDobResponse = await searchClientsRoute(
       new Request("http://localhost/api/clients/search?lastName=Smith"),
+    );
+    expect(fallbackDobResponse.status).toBe(200);
+
+    const invalidResponse = await searchClientsRoute(
+      new Request("http://localhost/api/clients/search?lastName=Smith&dob=invalid-date"),
     );
     expect(invalidResponse.status).toBe(400);
   });
@@ -229,16 +234,17 @@ describe("API route smoke tests", () => {
   });
 
   it("records help and handles missing clients", async () => {
-    mocks.updateClientById.mockResolvedValueOnce({
+    mocks.getClientById.mockResolvedValueOnce({
       clientId: "abc",
       firstName: "John",
       lastName: "Smith",
       dob: "1990-01-01",
-      amount: 75,
-      purpose: "Utilities",
-      lastHelpedDate: "2026-03-01",
+      amount: 50,
+      purpose: "Food",
+      lastHelpedDate: "2025-01-01",
     });
-    mocks.updateClientById.mockResolvedValueOnce(null);
+    mocks.createClient.mockResolvedValueOnce(undefined);
+    mocks.getClientById.mockResolvedValueOnce(null);
 
     const successResponse = await helpRoute(
       new Request("http://localhost/api/clients/abc/help", {
@@ -252,7 +258,18 @@ describe("API route smoke tests", () => {
       }),
       { params: Promise.resolve({ clientId: "abc" }) },
     );
-    expect(successResponse.status).toBe(200);
+    expect(successResponse.status).toBe(201);
+    const successJson = await successResponse.json();
+    expect(successJson.data).toMatchObject({
+      firstName: "John",
+      lastName: "Smith",
+      dob: "1990-01-01",
+      amount: 75,
+      purpose: "Utilities",
+      lastHelpedDate: "2026-03-01",
+    });
+    expect(successJson.data.clientId).toBeTypeOf("string");
+    expect(mocks.createClient).toHaveBeenCalledTimes(1);
 
     const notFoundResponse = await helpRoute(
       new Request("http://localhost/api/clients/missing/help", {

@@ -6,14 +6,12 @@ import { UserRoundPlus, CalendarRange, Search } from "lucide-react";
 import ClientSearchForm from "@/components/ClientSearchForm";
 import ClientList from "@/components/ClientList";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { searchClients, getEligibility } from "@/lib/apiClient";
+import { searchClients } from "@/lib/apiClient";
 import type { ClientRecord } from "@/lib/dynamodb";
-import type { EligibilityResult } from "@/lib/apiClient";
 import "./dashboard.css";
 
 export default function Dashboard() {
   const [clients, setClients] = useState<ClientRecord[]>([]);
-  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
@@ -31,18 +29,6 @@ export default function Dashboard() {
         );
       }
       setClients(results);
-
-      const eligMap: Record<string, EligibilityResult | null> = {};
-      await Promise.all(
-        results.map(async (client) => {
-          try {
-            eligMap[client.clientId] = await getEligibility(client.clientId);
-          } catch {
-            eligMap[client.clientId] = null;
-          }
-        })
-      );
-      setEligibilityMap(eligMap);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Search failed.");
       setClients([]);
@@ -76,7 +62,7 @@ export default function Dashboard() {
       {error && <p className="dashboard-error">{error}</p>}
       {isLoading && <LoadingSpinner />}
       {!isLoading && hasSearched && (
-        <ClientList clients={clients} eligibilityMap={eligibilityMap} />
+        <ClientList clients={clients} />
       )}
     </div>
   );

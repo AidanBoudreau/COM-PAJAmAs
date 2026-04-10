@@ -2,17 +2,14 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import EligibilityBadge from "./EligibilityBadge";
 import type { ClientRecord } from "@/lib/dynamodb";
-import type { EligibilityResult } from "@/lib/apiClient";
 import "./ClientCard.css";
 
 interface ClientCardProps {
   client: ClientRecord;
-  eligibility: EligibilityResult | null;
 }
 
-export default function ClientCard({ client, eligibility }: ClientCardProps) {
+export default function ClientCard({ client }: ClientCardProps) {
   return (
     <Link href={`/clients/${client.clientId}`} className="client-card">
       <div className="client-card-info">
@@ -28,7 +25,6 @@ export default function ClientCard({ client, eligibility }: ClientCardProps) {
         </div>
         <div className="client-card-meta">
           <span>Last helped: {client.lastHelpedDate}</span>
-          <EligibilityBadge eligibility={eligibility} />
         </div>
       </div>
       <ChevronRight size={20} className="client-card-chevron" />

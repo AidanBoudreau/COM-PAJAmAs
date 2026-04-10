@@ -3,21 +3,18 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Pencil, HandHeart } from "lucide-react";
-import EligibilityBadge from "@/components/EligibilityBadge";
 import Modal from "@/components/Modal";
 import RecordHelpForm from "@/components/RecordHelpForm";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { getClient, getEligibility, updateClient } from "@/lib/apiClient";
+import { getClient, updateClient } from "@/lib/apiClient";
 import { formatIsoDateInput } from "@/lib/dateInput";
 import type { ClientRecord } from "@/lib/dynamodb";
-import type { EligibilityResult } from "@/lib/apiClient";
 import "./client-detail.css";
 
 export default function ClientDetailPage({ params }: { params: Promise<{ clientId: string }> }) {
   const { clientId } = use(params);
   const router = useRouter();
   const [client, setClient] = useState<ClientRecord | null>(null);
-  const [eligibility, setEligibility] = useState<EligibilityResult | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [showHelpModal, setShowHelpModal] = useState(false);
@@ -31,13 +28,6 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
       try {
         const clientData = await getClient(clientId);
         setClient(clientData);
-
-        try {
-          const eligData = await getEligibility(clientId);
-          setEligibility(eligData);
-        } catch {
-          setEligibility(null);
-        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load client.");
       } finally {
@@ -91,7 +81,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
   function handleHelpSuccess(updatedClient: ClientRecord) {
     setClient(updatedClient);
     setShowHelpModal(false);
-    getEligibility(clientId).then(setEligibility).catch(() => {});
+    router.replace(`/clients/${updatedClient.clientId}`);
   }
 
   if (isLoading) return <LoadingSpinner />;
@@ -107,7 +97,6 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
       <div className="detail-card">
         <div className="detail-header">
           <h1>{client.firstName} {client.lastName}</h1>
-          <EligibilityBadge eligibility={eligibility} />
         </div>
 
         {!isEditing ? (
@@ -138,12 +127,6 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
                 <span className="detail-value">{client.lastHelpedDate}</span>
               </div>
             </div>
-
-            {eligibility && !eligibility.eligible && (
-              <div className="detail-eligibility-info">
-                Next eligible: {eligibility.nextEligibleDate} ({eligibility.daysRemaining} days)
-              </div>
-            )}
 
             <div className="detail-actions">
               <button className="detail-edit-btn" onClick={startEditing}>
