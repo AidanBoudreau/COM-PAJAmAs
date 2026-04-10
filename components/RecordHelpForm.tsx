@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { recordHelp } from "@/lib/apiClient";
+import { formatIsoDateInput } from "@/lib/dateInput";
 import type { ClientRecord } from "@/lib/dynamodb";
 import "./RecordHelpForm.css";
 
@@ -47,9 +48,11 @@ export default function RecordHelpForm({ clientId, onSuccess, onCancel }: Record
         <input
           id="helpDate"
           type="text"
-          placeholder="MM-DD-YYYY"
+          placeholder="YYYY-MM-DD"
           value={lastHelpedDate}
-          onChange={(e) => setLastHelpedDate(e.target.value)}
+          onChange={(e) => setLastHelpedDate(formatIsoDateInput(e.target.value))}
+          inputMode="numeric"
+          maxLength={10}
           required
         />
       </div>

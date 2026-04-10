@@ -5,9 +5,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import CalendarGrid from "@/components/CalendarGrid";
 import ClientList from "@/components/ClientList";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { getClientsByDateRange, getEligibility } from "@/lib/apiClient";
+import { getClientsByDateRange } from "@/lib/apiClient";
 import type { ClientRecord } from "@/lib/dynamodb";
-import type { EligibilityResult } from "@/lib/apiClient";
 import "./calendar.css";
 
 const MONTH_NAMES = [
@@ -23,7 +22,6 @@ export default function CalendarPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
 
   const loadMonth = useCallback(async () => {
     setIsLoading(true);
@@ -45,18 +43,6 @@ export default function CalendarPage() {
         grouped[key].push(client);
       }
       setClientsByDate(grouped);
-
-      const eligMap: Record<string, EligibilityResult | null> = {};
-      await Promise.all(
-        clients.map(async (client) => {
-          try {
-            eligMap[client.clientId] = await getEligibility(client.clientId);
-          } catch {
-            eligMap[client.clientId] = null;
-          }
-        })
-      );
-      setEligibilityMap(eligMap);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load calendar data.");
     } finally {
@@ -133,7 +119,7 @@ export default function CalendarPage() {
               {selectedClients.length === 0 ? (
                 <p className="calendar-no-clients">No clients helped on this day.</p>
               ) : (
-                <ClientList clients={selectedClients} eligibilityMap={eligibilityMap} />
+                <ClientList clients={selectedClients} />
               )}
             </div>
           )}

@@ -6,14 +6,12 @@ import { UserRoundPlus, ChevronRight } from "lucide-react";
 import ClientSearchForm from "@/components/ClientSearchForm";
 import ClientList from "@/components/ClientList";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { searchClients, getEligibility, getAllClients } from "@/lib/apiClient";
+import { searchClients, getAllClients } from "@/lib/apiClient";
 import type { ClientRecord } from "@/lib/dynamodb";
-import type { EligibilityResult } from "@/lib/apiClient";
 import "./clients.css";
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<ClientRecord[]>([]);
-  const [eligibilityMap, setEligibilityMap] = useState<Record<string, EligibilityResult | null>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
@@ -69,17 +67,6 @@ export default function ClientsPage() {
       }
 
       setClients(results);
-
-      const eligMap: Record<string, EligibilityResult | null> = {};
-      const eligPromises = results.map(async (client) => {
-        try {
-          eligMap[client.clientId] = await getEligibility(client.clientId);
-        } catch {
-          eligMap[client.clientId] = null;
-        }
-      });
-      await Promise.all(eligPromises);
-      setEligibilityMap(eligMap);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Search failed.");
       setClients([]);
@@ -105,7 +92,7 @@ export default function ClientsPage() {
       {isLoading && <LoadingSpinner />}
 
       {!isLoading && hasSearched && (
-        <ClientList clients={clients} eligibilityMap={eligibilityMap} />
+        <ClientList clients={clients} />
       )}
 
       {!hasSearched && (
