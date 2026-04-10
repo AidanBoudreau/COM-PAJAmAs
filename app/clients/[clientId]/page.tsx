@@ -91,7 +91,8 @@ export default function ClientDetailPage({ params }: { params: Promise<{ clientI
   function handleHelpSuccess(updatedClient: ClientRecord) {
     setClient(updatedClient);
     setShowHelpModal(false);
-    getEligibility(clientId).then(setEligibility).catch(() => {});
+    router.replace(`/clients/${updatedClient.clientId}`);
+    getEligibility(updatedClient.clientId).then(setEligibility).catch(() => {});
   }
 
   if (isLoading) return <LoadingSpinner />;
